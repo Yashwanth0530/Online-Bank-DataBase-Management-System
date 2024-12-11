@@ -24,7 +24,7 @@ The Online Bank Database Management System is a comprehensive web application de
 ## Installation and Setup
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/online-bank-database-system.git
+   git clone https://github.com/Yashwanth0530/online-bank-database-system.git
    ```
 
 2. **Navigate to the Project Directory**:
@@ -88,4 +88,4 @@ The Online Bank Database Management System is a comprehensive web application de
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
 ## Contact
-For queries or contributions, contact [Your Name] at [your.email@example.com].
+For queries or contributions, contact [P Yashwanth Kumar] at [yashwanthp530@gmail.com].
