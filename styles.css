@@ -1,0 +1,254 @@
+/* Common Styling */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide scrollbars */
+}
+
+.background-container {
+    background-image: url('/static/images/bankinterior.jpg'); /* Replace with your bank interior image */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Login Container Styling */
+.login-container {
+    background: black; /* Black background */
+    color: white; /* White text color */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+    position: fixed; /* Fixed positioning */
+    right: 20px; /* Positioned to the right */
+    top: 50%; /* Centered vertically */
+    transform: translateY(-50%); /* Adjust vertical centering */
+    opacity: 1;
+    animation: fadeInUp 1s ease-out forwards;
+    background-image: url('/static/images/bankinterior.jpg'); /* Background image for the box */
+    background-size: cover; /* Ensure background image covers the box */
+    background-position: center; /* Center the background image */
+}
+
+.login-container h1 {
+    font-size: 2.5rem;
+    color: #fff; /* White text color */
+    margin-bottom: 20px;
+}
+
+.login-container input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent white background for inputs */
+}
+
+/* Login Button Styling */
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: green; /* Green color for login button */
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.login-container button:hover {
+    background-color: darkgreen; /* Darker green on hover */
+}
+
+/* Logout Button Styling */
+.logout {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    background-color: red; /* Red color for logout button */
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.logout:hover {
+    background-color: darkred; /* Darker red on hover */
+}
+
+/* Dashboard Styling */
+.container, .dashboard-container {
+    text-align: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    position: fixed;
+    left: 20px; /* Positioned to the left */
+    top: 20px; /* Positioned near the top */
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.container h1, .dashboard-container h1 {
+    font-size: 2.5rem;
+    color: #0d6efd; /* Blue color for the heading */
+    margin-bottom: 20px;
+}
+
+.dashboard-container p {
+    font-size: 1rem;
+    color: #333; /* Darker color for paragraph text */
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+.btn, .dashboard-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    background-color: #0d6efd; /* Blue color for buttons */
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px 0;
+    cursor: pointer;
+    text-align: center;
+    border: none; /* Remove border */
+}
+
+.btn:hover, .dashboard-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Additional Styling */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.login-link, .register-link {
+    color: #09b912;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link:hover, .register-link:hover {
+    text-decoration: underline;
+}
+
+/* Table Styling for Transactions Page */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+thead {
+    background-color: #f4f4f4;
+}
+
+th {
+    font-weight: 700;
+}
+
+.transactions-container {
+    margin: 20px;
+}
+
+/* Center form styling */
+.center-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f5;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Registration Form Styling */
+.registration-form {
+    background: #fff; /* White background for the form */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 80%; /* Adjust width to fill most of the page */
+    max-width: 600px; /* Max width to keep it from getting too wide */
+    height: 90%; /* Adjust height to fill most of the page */
+    max-height: 800px; /* Max height to prevent excessive scrolling */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style individual form inputs */
+.registration-form input, 
+.registration-form textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent white background for inputs */
+}
+
+/* Style the button */
+.registration-form button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0d6efd; /* Blue color for button */
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.registration-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Customers</title>
+</head>
+<body>
+    <h1>Customer List</h1>
+    <button onclick="logout()">Logout</button>
+    <div id="customerList"></div>
+    <script>
+        function fetchCustomers() {
+            fetch('/list_customers')
+                .then(response => response.json())
+                .then(data => {
+                    const customerList = document.getElementById('customerList');
+                    if (data.length === 0) {
+                        customerList.innerHTML = 'No customers found.';
+                    } else {
+                        let html = '<ul>';
+                        data.forEach(customer => {
+                            html += `<li>${customer[1]} ${customer[2]} - ${customer[7]}</li>`; // Adjust indices based on your schema
+                        });
+                        html += '</ul>';
+                        customerList.innerHTML = html;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('customerList').textContent = `Error: ${error.message}`;
+                });
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST'
+            }).then(() => {
+                window.location.href = '/login';
+            });
+        }
+
+        // Fetch customers when the page loads
+        document.addEventListener('DOMContentLoaded', fetchCustomers);
+    </script>
+</body>
+</html>

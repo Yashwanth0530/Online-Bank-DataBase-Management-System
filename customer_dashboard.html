@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .form-section, .loan-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .form-section input[type="number"], .form-section input[type="text"], .form-section input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-section button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-section button:hover {
+            background-color: #45a049;
+        }
+        .loan-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .loan-section table, th, td {
+            border: 1px solid #ddd;
+        }
+        .loan-section th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .loan-section th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ session['first_name'] }}!</h1>
+        <h2>Account Balance: <span id="balance">Loading...</span></h2>
+
+        <button class="button" id="show-add-money-form">Add Money</button>
+        <button class="button" id="show-transfer-funds-form">Transfer Funds</button>
+        <button class="button" id="show-loan-form">Apply for Loan</button>
+
+        <div id="add-money-form" class="form-section">
+            <h3>Add Money</h3>
+            <input type="number" id="add-amount" placeholder="Enter amount to add">
+            <button onclick="addMoney()">Submit</button>
+            <p id="add-money-message"></p>
+        </div>
+
+        <div id="transfer-funds-form" class="form-section">
+            <h3>Transfer Funds</h3>
+            <input type="email" id="to-email" placeholder="Recipient's Email">
+            <input type="number" id="transfer-amount" placeholder="Enter amount to transfer">
+            <button onclick="transferFunds()">Submit</button>
+            <p id="transfer-funds-message"></p>
+        </div>
+
+        <div id="loan-form" class="form-section">
+            <h3>Apply for Loan</h3>
+            <input type="number" id="loan-amount" placeholder="Enter loan amount">
+            <input type="text" id="loan-purpose" placeholder="Enter loan purpose">
+            <button onclick="applyForLoan()">Submit</button>
+            <p id="loan-message"></p>
+        </div>
+        
+        <div id="loan-section" class="loan-section">
+            <h3>Your Loan Status</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Amount</th>
+                        <th>Purpose</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="loan-table-body">
+                    <!-- Loan data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <button class="button" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/account_balance')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.balance !== undefined) {
+                        document.getElementById('balance').textContent = data.balance;
+                    } else {
+                        document.getElementById('balance').textContent = data.message || "Error fetching balance";
+                    }
+                });
+
+            fetch('/loan_status')
+                .then(response => response.json())
+                .then(data => {
+                    const loanTableBody = document.getElementById('loan-table-body');
+                    if (data.loans && data.loans.length > 0) {
+                        data.loans.forEach(loan => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${loan.Loan_ID}</td>
+                                <td>${loan.Amount}</td>
+                                <td>${loan.Purpose}</td>
+                                <td>${loan.Issue_date}</td>
+                                <td>${loan.Due_date}</td>
+                                <td>${loan.Status}</td>
+                            `;
+                            loanTableBody.appendChild(row);
+                        });
+                        document.getElementById('loan-section').style.display = 'block';
+                    } else {
+                        document.getElementById('loan-section').style.display = 'none';
+                    }
+                });
+
+            document.getElementById('show-add-money-form').addEventListener('click', function() {
+                document.getElementById('add-money-form').style.display = 'block';
+                document.getElementById('transfer-funds-form').style.display = 'none';
+                document.getElementById('loan-form').style.display = 'none';
+            });
+
+            document.getElementById('show-transfer-funds-form').addEventListener('click', function() {
+                document.getElementById('transfer-funds-form').style.display = 'block';
+                document.getElementById('add-money-form').style.display = 'none';
+                document.getElementById('loan-form').style.display = 'none';
+            });
+
+            document.getElementById('show-loan-form').addEventListener('click', function() {
+                document.getElementById('loan-form').style.display = 'block';
+                document.getElementById('add-money-form').style.display = 'none';
+                document.getElementById('transfer-funds-form').style.display = 'none';
+            });
+        });
+
+        function addMoney() {
+            const amount = document.getElementById('add-amount').value;
+            fetch('/add_money', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: parseFloat(amount) }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('add-money-message').textContent = data.message;
+                if (data.message === "Money added successfully") {
+                    // Update balance immediately
+                    const newBalance = parseFloat(document.getElementById('balance').textContent) + parseFloat(amount);
+                    document.getElementById('balance').textContent = newBalance.toFixed(2);
+                }
+            });
+        }
+
+        function transferFunds() {
+            const toEmail = document.getElementById('to-email').value;
+            const amount = document.getElementById('transfer-amount').value;
+            fetch('/transfer_funds', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ to_email: toEmail, amount: parseFloat(amount) }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('transfer-funds-message').textContent = data.message;
+                if (data.message === "Transfer successful") {
+                    // Update balance immediately
+                    const newBalance = parseFloat(document.getElementById('balance').textContent) - parseFloat(amount);
+                    document.getElementById('balance').textContent = newBalance.toFixed(2);
+                }
+            });
+        }
+
+        function applyForLoan() {
+            const amount = document.getElementById('loan-amount').value;
+            const purpose = document.getElementById('loan-purpose').value;
+            fetch('/apply_for_loan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: parseFloat(amount), purpose: purpose }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loan-message').textContent = data.message;
+                if (data.status) {
+                    document.getElementById('loan-status').textContent = `Application Status: ${data.status}`;
+                }
+            });
+        }
+
+        function logout() {
+            fetch('/logout')
+                .then(() => {
+                    window.location.href = '/';
+                });
+        }
+    </script>
+</body>
+</html>

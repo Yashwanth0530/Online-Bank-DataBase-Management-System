@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Loans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333;
+            margin: 0 0 20px 0;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Allow horizontal scrolling if needed */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .grant-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .reject-btn {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Loan Applications</h1>
+
+        <!-- Debugging line to check passed data -->
+        {% if loans %}
+            <p>Loan data available</p>
+        {% else %}
+            <p>No loan data available</p>
+        {% endif %}
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Amount</th>
+                        <th>Purpose</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Customer ID</th>
+                        <th>Customer Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                    <tr id="loan-{{ loan.Loan_ID }}">
+                        <td>{{ loan.Loan_ID }}</td>
+                        <td>${{ loan.Amount }}</td>
+                        <td>{{ loan.Purpose }}</td>
+                        <td>{{ loan.Issue_date }}</td>
+                        <td>{{ loan.Due_date }}</td>
+                        <td id="status-{{ loan.Loan_ID }}">{{ loan.Status }}</td>
+                        <td>{{ loan.Customer_ID }}</td>
+                        <td>{{ loan.First_Name }} {{ loan.Last_Name }}</td>
+                        <td>
+                            {% if loan.Status == 'Pending' %}
+                            <button class="btn grant-btn" onclick="updateLoanStatus({{ loan.Loan_ID }}, 'Granted')">Grant</button>
+                            <button class="btn reject-btn" onclick="updateLoanStatus({{ loan.Loan_ID }}, 'Rejected')">Reject</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ url_for('employee_dashboard') }}" class="btn">Back to Dashboard</a>
+    </div>
+
+    <script>
+        function updateLoanStatus(loanId, status) {
+            fetch('/update_loan_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ loan_id: loanId, status: status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.message === "Loan status updated successfully") {
+                    // Update the status text in the table
+                    const statusCell = document.getElementById('status-' + loanId);
+                    statusCell.textContent = status;
+
+                    // Remove the buttons
+                    const actionsCell = document.querySelector('#loan-' + loanId + ' td:last-child');
+                    actionsCell.innerHTML = '';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
